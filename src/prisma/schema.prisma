@@ -10,8 +10,91 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model User {
-  id       Int    @id @default(autoincrement())
-  email    String @unique
-  password String
+model Response {
+  uid        String
+  option     QuestionOption @relation(fields: [optionId, questionId], references: [id, questionId])
+  optionId   Int
+  questionId Int
+  createdAt  DateTime
+
+  @@id([uid, optionId])
+}
+
+model QuestionOption {
+  id         Int
+  question   Question   @relation(fields: [questionId], references: [id])
+  questionId Int
+  body       String
+  responses  Response[]
+
+  @@id([id, questionId])
+}
+
+model Question {
+  id              Int              @id @default(autoincrement())
+  body            String
+  category        String
+  type            QuestionType
+  knowMore        Json
+  createdAt       DateTime
+  options         QuestionOption[]
+  comments        Comment[]
+  matchQuestions  MatchQuestion[]
+  matchExclusions MatchExclusion[]
+}
+
+enum QuestionType {
+  BINARY
+  MULTIPLE_CHOICE
+  MULTIPLE_RESPONSE
+  SCALE
+}
+
+model Comment {
+  id         Int       @id @default(autoincrement())
+  question   Question  @relation(fields: [questionId], references: [id])
+  questionId Int
+  uid        String
+  parentId   Int?
+  body       String
+  createdAt  DateTime
+  parent     Comment?  @relation("CommentReplies", fields: [parentId], references: [id])
+  children   Comment[] @relation("CommentReplies")
+  likes      Like[]
+
+}
+
+model Like {
+  uid       String
+  commentId Int
+  comment   Comment @relation(fields: [commentId], references: [id])
+
+  @@id([uid, commentId])
+}
+
+model MatchExclusion {
+  uid        String
+  questionId Int
+  question   Question @relation(fields: [questionId], references: [id])
+
+  @@id([uid, questionId])
+}
+
+model Match {
+  id        Int      @id @default(autoincrement())
+  uid       String
+  otherUid  String
+  createdAt DateTime
+  matchedAt DateTime
+
+  matchQuestions MatchQuestion[]
+}
+
+model MatchQuestion {
+  matchId    Int
+  questionId Int
+  question   Question @relation(fields: [questionId], references: [id])
+  match      Match    @relation(fields: [matchId], references: [id])
+
+  @@id([matchId, questionId])
 }
