@@ -1,6 +1,5 @@
 process.env['NODE_CONFIG_DIR'] = __dirname + '/configs';
 
-import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import config from 'config';
@@ -48,7 +47,6 @@ class App {
     this.app.use(cors({ origin: config.get('cors.origin'), credentials: config.get('cors.credentials') }));
     this.app.use(hpp());
     this.app.use(helmet());
-    this.app.use(compression());
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
     this.app.use(cookieParser());
