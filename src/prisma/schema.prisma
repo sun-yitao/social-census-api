@@ -15,7 +15,7 @@ model Response {
   option     QuestionOption @relation(fields: [optionId, questionId], references: [id, questionId])
   optionId   Int
   questionId Int
-  createdAt  DateTime
+  createdAt  DateTime       @default(now())
 
   @@id([uid, optionId])
 }
@@ -36,7 +36,7 @@ model Question {
   category        String
   type            QuestionType
   knowMore        Json
-  createdAt       DateTime
+  createdAt       DateTime         @default(now())
   options         QuestionOption[]
   comments        Comment[]
   matchQuestions  MatchQuestion[]
@@ -57,7 +57,7 @@ model Comment {
   uid        String
   parentId   Int?
   body       String
-  createdAt  DateTime
+  createdAt  DateTime  @default(now())
   parent     Comment?  @relation("CommentReplies", fields: [parentId], references: [id])
   children   Comment[] @relation("CommentReplies")
   likes      Like[]
@@ -84,7 +84,7 @@ model Match {
   id        Int      @id @default(autoincrement())
   uid       String
   otherUid  String
-  createdAt DateTime
+  createdAt DateTime @default(now())
   matchedAt DateTime
 
   matchQuestions MatchQuestion[]
