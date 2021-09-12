@@ -1,26 +1,23 @@
 import { NextFunction, Response } from 'express';
 import { RequestWithUser } from '@/interfaces/auth.interface';
-
-import { PrismaClient } from '@prisma/client';
+import prisma from '@/prisma/client';
 
 class ResponseController {
-  public client = new PrismaClient();
-
   public create = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const user_id = req.user.uid;
+      const userId = req.user.uid;
 
-      const responses_count = await this.client.response.createMany({
+      const responsesCount = await prisma.response.createMany({
         data: req.body.responses.map(r => {
           return {
-            uid: user_id,
+            uid: userId,
             optionId: r.optionId,
             questionId: r.questionId,
           };
         }),
       });
 
-      res.json(responses_count);
+      res.json(responsesCount);
     } catch (error) {
       next(error);
     }

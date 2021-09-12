@@ -14,7 +14,7 @@ class IndexController {
 
   public signIn = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
-      const auth_response = await axios({
+      const authResponse = await axios({
         url: `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${FIREBASE_API_KEY}`,
         method: 'post',
         data: {
@@ -26,7 +26,7 @@ class IndexController {
       });
 
       res.json({
-        jwt: auth_response.data.idToken,
+        jwt: authResponse.data.idToken,
       });
     } catch (err) {
       next(err);
