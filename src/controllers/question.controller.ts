@@ -1,7 +1,7 @@
-import { NextFunction, Request, Response } from 'express';
+import { NextFunction, Response } from 'express';
 import { RequestWithUser } from '@/interfaces/auth.interface';
 
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from '@prisma/client';
 
 class QuestionController {
   public questions = new PrismaClient().question;
@@ -13,25 +13,25 @@ class QuestionController {
       const user_answered_questions = await this.responses.findMany({
         where: {
           uid: {
-            equals: user_id
-          }
+            equals: user_id,
+          },
         },
         select: {
-          questionId: true
-        }
+          questionId: true,
+        },
       });
 
       const next_questions = await this.questions.findMany({
         include: {
-          options: true
+          options: true,
         },
         where: {
-          id: { notIn: user_answered_questions.map(question => question.questionId) }
+          id: { notIn: user_answered_questions.map(question => question.questionId) },
         },
-        take: 10
+        take: 10,
       });
       res.json({
-        "questions": next_questions
+        questions: next_questions,
       });
     } catch (error) {
       next(error);

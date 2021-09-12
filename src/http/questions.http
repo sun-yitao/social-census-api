@@ -11,7 +11,7 @@ POST {{baseURL}}/signin
 Content-Type: {{json}}
 
 {
-    "email": "tester@gmail.com",
+  "email": "tester@gmail.com",
 	"password": "123456789"
 }
 
@@ -21,3 +21,17 @@ Content-Type: {{json}}
 GET {{baseURL}}/questions
 Authorization: Bearer {{authToken}}
 Content-Type: {{json}}
+
+###
+@authToken = {{signin.response.body.jwt}}
+# Send responses to a question
+POST {{baseURL}}/responses
+Authorization: Bearer {{authToken}}
+Content-Type: {{json}}
+
+{
+  "responses": [
+    { "optionId": 0, "questionId": 3 },
+    { "optionId": 2, "questionId": 3 }
+  ]
+}
