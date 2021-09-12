@@ -20,7 +20,6 @@ class QuestionController {
           questionId: true
         }
       });
-      console.log(user_id);
 
       const next_questions = await this.questions.findMany({
         include: {
