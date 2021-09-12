@@ -1,0 +1,23 @@
+# auth API
+
+###
+# baseURL
+@baseURL = http://localhost:3000
+@json = application/json
+
+###
+# @name signin
+POST {{baseURL}}/signin
+Content-Type: {{json}}
+
+{
+    "email": "tester@gmail.com",
+	"password": "123456789"
+}
+
+###
+@authToken = {{signin.response.body.jwt}}
+# Get 10 questions
+GET {{baseURL}}/questions
+Authorization: Bearer {{authToken}}
+Content-Type: {{json}}
