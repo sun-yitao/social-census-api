@@ -30,7 +30,7 @@ class IndexController {
         "jwt": auth_response.data.idToken
       });
     } catch (err) {
-      res.sendStatus(400);
+      next(err);
     }
   }
 }

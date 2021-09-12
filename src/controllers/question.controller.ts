@@ -1,10 +1,39 @@
 import { NextFunction, Request, Response } from 'express';
 import { RequestWithUser } from '@/interfaces/auth.interface';
 
+import { PrismaClient } from '@prisma/client'
+
 class QuestionController {
-  public list = (req: RequestWithUser, res: Response, next: NextFunction): void => {
+  public questions = new PrismaClient().question;
+  public responses = new PrismaClient().response;
+
+  public list = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
     try {
-      res.sendStatus(200);
+      const user_id = req.user.uid;
+      const user_answered_questions = await this.responses.findMany({
+        where: {
+          uid: {
+            equals: user_id
+          }
+        },
+        select: {
+          questionId: true
+        }
+      });
+      console.log(user_id);
+
+      const next_questions = await this.questions.findMany({
+        include: {
+          options: true
+        },
+        where: {
+          id: { notIn: user_answered_questions.map(question => question.questionId) }
+        },
+        take: 10
+      });
+      res.json({
+        "questions": next_questions
+      });
     } catch (error) {
       next(error);
     }
