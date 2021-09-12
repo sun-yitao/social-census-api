@@ -18,7 +18,8 @@
     "deploy:dev": "pm2 start ecosystem.config.js --only dev"
   },
   "prisma": {
-    "schema": "src/prisma/schema.prisma"
+    "schema": "src/prisma/schema.prisma",
+    "seed": "ts-node src/prisma/seed.ts"
   },
   "dependencies": {
     "@prisma/client": "^2.26.0",
