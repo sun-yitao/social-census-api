@@ -2,7 +2,7 @@ import { NextFunction, Response } from 'express';
 import { HttpException } from '@exceptions/HttpException';
 import { RequestWithUser } from '@interfaces/auth.interface';
 
-const admin = require("../firebase/firebase-config");
+const admin = require('../firebase/firebase-config');
 
 const authMiddleware = async (req: RequestWithUser, res: Response, next: NextFunction) => {
   try {
