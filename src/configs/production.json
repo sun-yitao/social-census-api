@@ -6,7 +6,7 @@
         "dir": "../logs"
     },
     "cors": {
-        "origin": "your.domain.com",
+        "origin": "https://social-census.com",
         "credentials": true
     }
 }
