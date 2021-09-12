@@ -17,7 +17,7 @@ model Response {
   questionId Int
   createdAt  DateTime       @default(now())
 
-  @@id([uid, optionId])
+  @@id([uid, optionId, questionId])
 }
 
 model QuestionOption {
