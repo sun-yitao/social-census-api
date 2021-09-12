@@ -9,7 +9,7 @@ const authMiddleware = async (req: RequestWithUser, res: Response, next: NextFun
     const Authorization = req.cookies['Authorization'] || req.header('Authorization').split('Bearer ')[1] || null;
 
     if (Authorization) {
-      const firebaseUser = admin.auth().verifyIdToken(Authorization);
+      const firebaseUser = await admin.auth().verifyIdToken(Authorization);
 
       if (firebaseUser) {
         req.user = firebaseUser;
