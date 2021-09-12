@@ -15,7 +15,14 @@ Content-Type: {{json}}
 
 ###
 @authToken = {{signin.response.body.jwt}}
-# Get 10 questions
-GET {{baseURL}}/questions
+# Send responses to a question
+POST {{baseURL}}/responses
 Authorization: Bearer {{authToken}}
 Content-Type: {{json}}
+
+{
+  "responses": [
+    { "optionId": 0, "questionId": 3 },
+    { "optionId": 2, "questionId": 3 }
+  ]
+}
