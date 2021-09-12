@@ -15,13 +15,13 @@ const authMiddleware = async (req: RequestWithUser, res: Response, next: NextFun
         req.user = firebaseUser;
         next();
       } else {
-        next(new HttpException(401, 'Wrong authentication token'));
+        next(new HttpException(403, 'User not authorized.'));
       }
     } else {
-      next(new HttpException(404, 'Authentication token missing'));
+      next(new HttpException(403, 'User not authorized.'));
     }
   } catch (error) {
-    next(new HttpException(401, 'Wrong authentication token'));
+    next(new HttpException(403, 'User not authorized.'));
   }
 };
 
