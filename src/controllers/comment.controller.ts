@@ -16,12 +16,63 @@ class CommentController {
           parentId: null,
         },
         include: {
-          children: true,
+          likes: true,
+          children: {
+            include: {
+              likes: true,
+            },
+          },
         },
       });
 
+      // transform Comment's Likes array to likes count
+      const likesArrayToCount = comment => {
+        return {
+          ...comment,
+          likes: comment.likes.length,
+        };
+      };
+      const transformedComments = comments.map(comment => {
+        return {
+          ...likesArrayToCount(comment),
+          children: comment['children'].map(likesArrayToCount),
+        };
+      });
+
       res.json({
-        value: comments,
+        value: transformedComments,
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public create = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const userId = req.user.uid;
+      const questionId = parseInt(req.params.questionId);
+      const reqComment = req.body.value;
+
+      const comment: Comment = await this.commentService.create({
+        data: {
+          questionId: questionId,
+          uid: userId,
+          body: reqComment.body,
+          parentId: reqComment.parentId ? reqComment.parentId : undefined,
+        },
+        select: {
+          id: true,
+          questionId: true,
+          uid: true,
+          parentId: true,
+          body: true,
+          createdAt: true,
+        },
+      });
+
+      res.status(201);
+      res.json({
+        value: comment,
       });
     } catch (error) {
       next(error);

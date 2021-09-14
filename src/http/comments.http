@@ -19,3 +19,17 @@ Content-Type: {{json}}
 GET {{baseURL}}/questions/3/comments
 Authorization: Bearer {{authToken}}
 Content-Type: {{json}}
+
+###
+@authToken = {{signin.response.body.jwt}}
+# Send responses to a question
+POST {{baseURL}}/questions/3/comments
+Authorization: Bearer {{authToken}}
+Content-Type: {{json}}
+
+{
+  "value": {
+    "body": "Hi everyone",
+    "parentId": 2
+  }
+}

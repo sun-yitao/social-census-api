@@ -14,6 +14,7 @@ class CommentRoute implements Routes {
 
   private initializeRoutes() {
     this.router.get(`${this.path}`, authMiddleware, this.commentController.list);
+    this.router.post(`${this.path}`, authMiddleware, this.commentController.create);
   }
 }
 

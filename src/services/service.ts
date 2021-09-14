@@ -24,9 +24,9 @@ class Service {
     return one;
   }
 
-  public async create<Type>(data: object): Promise<Type> {
-    if (isEmpty(data)) throw new HttpException(400, 'Empty data received');
-    const createData: Type = await this.resource.create({ data: data });
+  public async create<Type>(options: object): Promise<Type> {
+    if (isEmpty(options)) throw new HttpException(400, 'Empty data received');
+    const createData: Type = await this.resource.create(options);
     return createData;
   }
 
