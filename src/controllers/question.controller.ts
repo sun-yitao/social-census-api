@@ -1,15 +1,17 @@
 import { NextFunction, Response } from 'express';
 import { RequestWithUser } from '@/interfaces/auth.interface';
-import prismaClient from '@/prisma/client';
+import { Question, Response as ResponseType } from '.prisma/client';
+import QuestionService from '@/services/question.service';
+import ResponseService from '@/services/response.service';
 
 class QuestionController {
-  public questions = prismaClient.question;
-  public responses = prismaClient.response;
+  public questionService = new QuestionService();
+  public responseService = new ResponseService();
 
   public list = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
     try {
       const userId = req.user.uid;
-      const userAnsweredQuestions = await this.responses.findMany({
+      const userResponses: ResponseType[] = await this.responseService.findMany({
         where: {
           uid: {
             equals: userId,
@@ -20,12 +22,12 @@ class QuestionController {
         },
       });
 
-      const nextQuestions = await this.questions.findMany({
+      const nextQuestions: Question[] = await this.questionService.findMany({
         include: {
           options: true,
         },
         where: {
-          id: { notIn: userAnsweredQuestions.map(question => question.questionId) },
+          id: { notIn: userResponses.map(response => response.questionId) },
         },
         take: 10,
       });
@@ -40,7 +42,7 @@ class QuestionController {
   public get = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
     try {
       const questionId = parseInt(req.params.questionId);
-      const question = await this.questions.findUnique({
+      const question = await this.questionService.findUnique({
         where: {
           id: questionId,
         },

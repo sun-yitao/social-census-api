@@ -1,9 +1,12 @@
 import { NextFunction, Response } from 'express';
 import { RequestWithUser } from '@/interfaces/auth.interface';
-import prismaClient from '@/prisma/client';
 import { HttpException } from '@/exceptions/HttpException';
+import ResponseService from '@/services/response.service';
+import { Response as ResponseType } from '.prisma/client';
 
 class ResponseController {
+  public responseService = new ResponseService();
+
   public create = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
     try {
       const userId = req.user.uid;
@@ -14,7 +17,7 @@ class ResponseController {
         throw new HttpException(400, 'Invalid responses');
       }
 
-      await prismaClient.response.createMany({
+      await this.responseService.createMany({
         data: responses.map(r => {
           return {
             uid: userId,
@@ -24,7 +27,7 @@ class ResponseController {
         }),
       });
 
-      const userQuestionResponses = await prismaClient.response.findMany({
+      const userResponses: ResponseType[] = await this.responseService.findMany({
         where: {
           uid: userId,
           questionId: questionId,
@@ -33,7 +36,7 @@ class ResponseController {
 
       res.status(201);
       res.json({
-        value: userQuestionResponses,
+        value: userResponses,
       });
     } catch (error) {
       next(error);
