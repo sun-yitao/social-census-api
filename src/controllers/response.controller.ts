@@ -7,12 +7,12 @@ class ResponseController {
   public create = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
     try {
       const userId = req.user.uid;
+      const questionId = parseInt(req.params.questionId);
       const responses = req.body.responses;
       // if responses empty or not all responses has same questionId
-      if (responses.length == 0 || !responses.every((val, i, arr) => val.questionId === arr[0].questionId)) {
+      if (responses.length == 0 || !responses.every((val, i, arr) => val.questionId === questionId)) {
         throw new HttpException(400, 'Invalid responses');
       }
-      const questionId = responses[0].questionId;
 
       await prismaClient.response.createMany({
         data: responses.map(r => {

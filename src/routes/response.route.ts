@@ -4,7 +4,7 @@ import { Routes } from '@interfaces/routes.interface';
 import authMiddleware from '@/middlewares/auth.middleware';
 
 class ResponseRoute implements Routes {
-  public path = '/responses';
+  public path = '/questions/:questionId(\\d+)/responses';
   public router = Router();
   public responseController = new ResponseController();
 

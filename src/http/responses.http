@@ -16,7 +16,7 @@ Content-Type: {{json}}
 ###
 @authToken = {{signin.response.body.jwt}}
 # Send responses to a question
-POST {{baseURL}}/responses
+POST {{baseURL}}/questions/3/responses
 Authorization: Bearer {{authToken}}
 Content-Type: {{json}}
 
