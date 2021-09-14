@@ -6,9 +6,10 @@ import validateEnv from '@utils/validateEnv';
 import IndexRoute from '@routes/index.route';
 import QuestionRoute from '@routes/question.route';
 import ResponseRoute from './routes/response.route';
+import CommentRoute from './routes/comment.route';
 
 validateEnv();
 
-const app = new App([new IndexRoute(), new QuestionRoute(), new ResponseRoute()]);
+const app = new App([new IndexRoute(), new QuestionRoute(), new ResponseRoute(), new CommentRoute()]);
 
 app.listen();

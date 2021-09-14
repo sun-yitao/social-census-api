@@ -1,0 +1,21 @@
+###
+# baseURL
+@baseURL = http://localhost:3000/v1.0
+@json = application/json
+
+###
+# @name signin
+POST {{baseURL}}/signin
+Content-Type: {{json}}
+
+{
+  "email": "tester@gmail.com",
+	"password": "123456789"
+}
+
+###
+@authToken = {{signin.response.body.jwt}}
+# Send responses to a question
+GET {{baseURL}}/questions/3/comments
+Authorization: Bearer {{authToken}}
+Content-Type: {{json}}
