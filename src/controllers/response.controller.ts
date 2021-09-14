@@ -32,7 +32,9 @@ class ResponseController {
       });
 
       res.status(201);
-      res.json(userQuestionResponses);
+      res.json({
+        value: userQuestionResponses,
+      });
     } catch (error) {
       next(error);
     }
