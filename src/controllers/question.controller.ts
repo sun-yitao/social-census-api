@@ -1,10 +1,10 @@
 import { NextFunction, Response } from 'express';
 import { RequestWithUser } from '@/interfaces/auth.interface';
-import prisma from '@/prisma/client';
+import prismaClient from '@/prisma/client';
 
 class QuestionController {
-  public questions = prisma.question;
-  public responses = prisma.response;
+  public questions = prismaClient.question;
+  public responses = prismaClient.response;
 
   public list = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
     try {

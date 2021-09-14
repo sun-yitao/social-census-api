@@ -1,6 +1,6 @@
 import { PrismaClient, Prisma } from '@prisma/client';
 
-const prisma = new PrismaClient();
+const prismaClient = new PrismaClient();
 
 const questionData: Prisma.QuestionCreateInput[] = [
   {
@@ -86,7 +86,7 @@ const questionData: Prisma.QuestionCreateInput[] = [
 async function main() {
   console.log(`Start seeding ...`);
   for (const q of questionData) {
-    const question = await prisma.question.create({
+    const question = await prismaClient.question.create({
       data: q,
     });
     console.log(`Created question with id: ${question.id}`);
@@ -100,5 +100,5 @@ main()
     process.exit(1);
   })
   .finally(async () => {
-    await prisma.$disconnect();
+    await prismaClient.$disconnect();
   });
