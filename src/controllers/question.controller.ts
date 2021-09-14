@@ -30,7 +30,26 @@ class QuestionController {
         take: 10,
       });
       res.json({
-        questions: nextQuestions,
+        value: nextQuestions,
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public get = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const questionId = parseInt(req.params.questionId);
+      const question = await this.questions.findUnique({
+        where: {
+          id: questionId,
+        },
+        include: {
+          options: true,
+        },
+      });
+      res.json({
+        value: question,
       });
     } catch (error) {
       next(error);

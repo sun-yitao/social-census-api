@@ -19,3 +19,11 @@ Content-Type: {{json}}
 GET {{baseURL}}/questions
 Authorization: Bearer {{authToken}}
 Content-Type: {{json}}
+
+
+###
+@authToken = {{signin.response.body.jwt}}
+# Get a question by id
+GET {{baseURL}}/questions/1
+Authorization: Bearer {{authToken}}
+Content-Type: {{json}}
