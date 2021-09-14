@@ -30,4 +30,7 @@ jobs:
           sudo apt-get install lftp
           sudo apt-get install rsync
           which sshpass
-          sshpass -p ${{ secrets.PASSWORD }} ssh root@${{ secrets.IP }} "cd social-census-api && git pull origin main"
+          sshpass -p ${PASSWORD} ssh root@${IP} "cd social-census-api && git pull origin main"
+        env:
+          PASSWORD: ${{ secrets.PASSWORD }}
+          IP: ${{ secrets.IP }}
