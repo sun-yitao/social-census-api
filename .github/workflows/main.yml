@@ -28,4 +28,5 @@ jobs:
           sudo apt-get update
           sudo apt-get install sshpass
           sudo apt-get install lftp
+          sudo apt-get install rsync
           sshpass -p ${{ secrets.password }} ssh root@${{ secrets.ip }} "cd social-census-api && git pull origin main"
