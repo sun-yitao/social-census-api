@@ -42,7 +42,7 @@ class QuestionController {
   public get = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
     try {
       const questionId = parseInt(req.params.questionId);
-      const question = await this.questionService.findUnique({
+      const question: Question = await this.questionService.findUnique({
         where: {
           id: questionId,
         },
