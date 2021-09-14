@@ -13,7 +13,7 @@ class ResponseController {
       const questionId = parseInt(req.params.questionId);
       const responses = req.body.responses;
       // if responses empty or not all responses has same questionId
-      if (responses.length == 0 || !responses.every((val, i, arr) => val.questionId === questionId)) {
+      if (responses.length == 0) {
         throw new HttpException(400, 'Invalid responses');
       }
 
@@ -22,7 +22,7 @@ class ResponseController {
           return {
             uid: userId,
             optionId: r.optionId,
-            questionId: r.questionId,
+            questionId: questionId,
           };
         }),
       });

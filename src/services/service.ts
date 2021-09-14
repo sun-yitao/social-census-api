@@ -32,7 +32,7 @@ class Service {
 
   public async createMany<Type>(options?: object): Promise<Type[]> {
     if (isEmpty(options)) throw new HttpException(400, 'Empty data received');
-    const createData: Type[] = await this.resource.create(options);
+    const createData: Type[] = await this.resource.createMany(options);
     return createData;
   }
 

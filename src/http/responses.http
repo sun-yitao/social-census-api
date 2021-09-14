@@ -23,12 +23,10 @@ Content-Type: {{json}}
 {
   "responses": [
     {
-      "optionId": 0,
-      "questionId": 3
+      "optionId": 0
     },
     {
-      "optionId": 2,
-      "questionId": 3
+      "optionId": 2
     }
   ]
 }
