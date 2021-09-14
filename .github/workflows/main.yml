@@ -30,10 +30,9 @@ jobs:
           IP: ${{ secrets.IP }}      
         run: |
           sudo apt-get update
+          sudo apt-get install ssh
           sudo apt-get install sshpass
           sudo apt-get install lftp
           sudo apt-get install rsync
-          which sshpass
-          echo "$PASSWORD"
-          echo "$IP"
-          sshpass -p "$PASSWORD" ssh root@"$IP" "cd social-census-api && git pull origin main"
+          sshpass -p "$PASSWORD" ssh -o stricthostkeychecking=no root@"$IP" "cd social-census-api && git pull origin main"
+          echo "Deployment done"
