@@ -15,14 +15,14 @@ Content-Type: {{json}}
 
 ###
 @authToken = {{signin.response.body.jwt}}
-# Send responses to a question
+# Get comments for a question
 GET {{baseURL}}/questions/3/comments
 Authorization: Bearer {{authToken}}
 Content-Type: {{json}}
 
 ###
 @authToken = {{signin.response.body.jwt}}
-# Send responses to a question
+# Post comment for a question
 POST {{baseURL}}/questions/3/comments
 Authorization: Bearer {{authToken}}
 Content-Type: {{json}}

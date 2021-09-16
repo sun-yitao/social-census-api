@@ -27,3 +27,11 @@ Content-Type: {{json}}
 GET {{baseURL}}/questions/1
 Authorization: Bearer {{authToken}}
 Content-Type: {{json}}
+
+
+###
+@authToken = {{signin.response.body.jwt}}
+# Get statistics for question
+GET {{baseURL}}/questions/1/statistics
+Authorization: Bearer {{authToken}}
+Content-Type: {{json}}

@@ -1,33 +1,38 @@
 import { NextFunction, Response } from 'express';
 import { RequestWithUser } from '@/interfaces/auth.interface';
-import { Question, Response as ResponseType } from '.prisma/client';
+import { Question, QuestionOption } from '.prisma/client';
 import QuestionService from '@/services/question.service';
 import ResponseService from '@/services/response.service';
+import QuestionOptionService from '@/services/questionOption.service';
 
 class QuestionController {
   public questionService = new QuestionService();
   public responseService = new ResponseService();
+  public questionOptionService = new QuestionOptionService();
 
   public list = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
     try {
       const userId = req.user.uid;
-      const userResponses: ResponseType[] = await this.responseService.findMany({
-        where: {
-          uid: {
-            equals: userId,
+      const userResponses = (
+        await this.responseService.findMany({
+          where: {
+            uid: {
+              equals: userId,
+            },
           },
-        },
-        select: {
-          questionId: true,
-        },
-      });
+          select: {
+            questionId: true,
+          },
+          distinct: ['questionId'],
+        })
+      ).map(response => response['questionId']);
 
       const nextQuestions: Question[] = await this.questionService.findMany({
         include: {
           options: true,
         },
         where: {
-          id: { notIn: userResponses.map(response => response.questionId) },
+          id: { notIn: userResponses },
         },
         take: 10,
       });
@@ -52,6 +57,32 @@ class QuestionController {
       });
       res.json({
         value: question,
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public getStatistics = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const questionId = parseInt(req.params.questionId);
+      const optionsResponses: QuestionOption[] = await this.questionOptionService.findMany({
+        where: {
+          questionId: questionId,
+        },
+        include: {
+          responses: true,
+        },
+      });
+      const optionsResponsesCount = optionsResponses.map(option => {
+        return {
+          ...option,
+          responses: option['responses'].length,
+        };
+      });
+
+      res.json({
+        value: optionsResponsesCount,
       });
     } catch (error) {
       next(error);
