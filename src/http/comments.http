@@ -33,3 +33,17 @@ Content-Type: {{json}}
     "parentId": 2
   }
 }
+
+###
+@authToken = {{signin.response.body.jwt}}
+# Like a comment
+POST {{baseURL}}/questions/3/comments/1/likes
+Authorization: Bearer {{authToken}}
+Content-Type: {{json}}
+
+###
+@authToken = {{signin.response.body.jwt}}
+# Unlike a comment
+DELETE {{baseURL}}/questions/3/comments/1/likes
+Authorization: Bearer {{authToken}}
+Content-Type: {{json}}
