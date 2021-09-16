@@ -4,6 +4,7 @@ import { Question, QuestionOption } from '.prisma/client';
 import QuestionService from '@/services/question.service';
 import ResponseService from '@/services/response.service';
 import QuestionOptionService from '@/services/questionOption.service';
+import { HttpException } from '@/exceptions/HttpException';
 
 class QuestionController {
   public questionService = new QuestionService();
@@ -46,7 +47,13 @@ class QuestionController {
 
   public get = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
     try {
+      const userId = req.user.uid;
       const questionId = parseInt(req.params.questionId);
+      const userHasAnswered: boolean = await this.responseService.userHasAnswered(userId, questionId);
+      if (userHasAnswered) {
+        throw new HttpException(400, `User has already answered question.`);
+      }
+
       const question: Question = await this.questionService.findUnique({
         where: {
           id: questionId,
@@ -65,7 +72,10 @@ class QuestionController {
 
   public getStatistics = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
     try {
+      const userId = req.user.uid;
       const questionId = parseInt(req.params.questionId);
+      await this.responseService.userHasNotAnsweredThrow(userId, questionId);
+
       const optionsResponses: QuestionOption[] = await this.questionOptionService.findMany({
         where: {
           questionId: questionId,
