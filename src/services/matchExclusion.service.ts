@@ -9,7 +9,7 @@ class MatchExclusionService extends Service {
     super.resource = prismaClient.matchExclusion;
   }
 
-  public async deleteByQuestionId<Type>(uid: number, questionId: number): Promise<Type> {
+  public async deleteByQuestionId<Type>(uid: string, questionId: number): Promise<Type> {
     if (isEmpty(questionId)) throw new HttpException(400, 'Invalid question id');
 
     const one: Type = await this.resource.findFirst({ where: { uid: uid, questionId: questionId } });
