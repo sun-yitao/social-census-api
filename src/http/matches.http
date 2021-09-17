@@ -1,0 +1,47 @@
+###
+# baseURL
+@baseURL = http://localhost:3000/v1.0
+@json = application/json
+
+###
+# @name signin
+POST {{baseURL}}/signin
+Content-Type: {{json}}
+
+{
+  "email": "tester@gmail.com",
+	"password": "123456789"
+}
+
+###
+@authToken = {{signin.response.body.jwt}}
+# List match exclusions for a user
+GET {{baseURL}}/match/exclusions
+Authorization: Bearer {{authToken}}
+Content-Type: {{json}}
+
+###
+@authToken = {{signin.response.body.jwt}}
+# Create a new match exclusion
+POST {{baseURL}}/match/exclusions
+Authorization: Bearer {{authToken}}
+Content-Type: {{json}}
+
+{
+  "value": {
+    "questionId": 3
+  }
+}
+
+###
+@authToken = {{signin.response.body.jwt}}
+# Delete a match exclusion
+DELETE {{baseURL}}/match/exclusions
+Authorization: Bearer {{authToken}}
+Content-Type: {{json}}
+
+{
+  "value": {
+    "questionId": 3
+  }
+}

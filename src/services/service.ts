@@ -15,6 +15,16 @@ class Service {
     return one;
   }
 
+  public async findUniqueOptional<Type>(options?: object): Promise<Type | null> {
+    const one: Type = await this.resource.findUnique(options);
+    return one;
+  }
+
+  public async findFirstOptional<Type>(options?: object): Promise<Type | null> {
+    const one: Type = await this.resource.findFirst(options);
+    return one;
+  }
+
   public async findById<Type>(id: number): Promise<Type> {
     if (isEmpty(id)) throw new HttpException(400, 'Invalid id');
 
@@ -53,6 +63,11 @@ class Service {
     if (!one) throw new HttpException(404, `Id ${id} not found`);
 
     const deleteData = await this.resource.delete({ where: { id: id } });
+    return deleteData;
+  }
+
+  public async deleteMany<Type>(options?: object): Promise<Type> {
+    const deleteData = await this.resource.deleteMany(options);
     return deleteData;
   }
 }

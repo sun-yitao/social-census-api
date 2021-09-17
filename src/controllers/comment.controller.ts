@@ -3,7 +3,6 @@ import { RequestWithUser } from '@/interfaces/auth.interface';
 import { Comment } from '.prisma/client';
 import CommentService from '@/services/comment.service';
 import ResponseService from '@/services/response.service';
-import { HttpException } from '@/exceptions/HttpException';
 
 class CommentController {
   public commentService = new CommentService();

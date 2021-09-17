@@ -7,9 +7,10 @@ import IndexRoute from '@routes/index.route';
 import QuestionRoute from '@routes/question.route';
 import ResponseRoute from './routes/response.route';
 import CommentRoute from './routes/comment.route';
+import MatchRoute from './routes/match.route';
 
 validateEnv();
 
-const app = new App([new IndexRoute(), new QuestionRoute(), new ResponseRoute(), new CommentRoute()]);
+const app = new App([new IndexRoute(), new QuestionRoute(), new ResponseRoute(), new CommentRoute(), new MatchRoute()]);
 
 app.listen();
