@@ -65,7 +65,7 @@ class MatchController {
   public fillMatch = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
     try {
       const userId = req.user.uid;
-      const matchId: string = await redisClient.get(req.body.matchCode);
+      const matchId: string = await redisClient.get(req.body.value.matchCode);
       if (isEmpty(matchId)) {
         throw new HttpException(404, 'Match code expired or does not exist');
       }
@@ -77,9 +77,12 @@ class MatchController {
       if (!match) {
         throw new HttpException(404, 'Match id not found, invalid match code');
       }
-      await this.generateMatchQuestions(match);
+      if (match.uid == userId) {
+        throw new HttpException(409, 'You cannot match with yourself');
+      }
+      await this.generateMatchQuestions(match, userId);
 
-      match = this.matchService.resource.update({
+      match = await this.matchService.resource.update({
         where: {
           id: match.id,
         },
@@ -91,6 +94,7 @@ class MatchController {
           matchQuestions: true,
         },
       });
+      redisClient.del([req.body.value.matchCode, matchId]);
 
       res.status(201);
       res.json({
@@ -101,7 +105,7 @@ class MatchController {
     }
   };
 
-  private async generateMatchQuestions(match: Match): Promise<void> {
+  private async generateMatchQuestions(match: Match, otherUid: string): Promise<void> {
     // Get both users match exclusions and responded questions
     let combinedExclusions: MatchExclusion[] = await this.matchExclusionService.findMany({
       where: {
@@ -114,7 +118,7 @@ class MatchController {
       await this.matchExclusionService.findMany({
         where: {
           uid: {
-            equals: match.otherUid,
+            equals: otherUid,
           },
         },
       }),
@@ -140,7 +144,7 @@ class MatchController {
       await this.responseService.findMany({
         where: {
           uid: {
-            equals: match.otherUid,
+            equals: otherUid,
           },
           questionId: {
             in: user1Questions,
@@ -156,7 +160,7 @@ class MatchController {
     for (const questionId of user2Questions) {
       await this.matchQuestionService.create({
         data: {
-          matchID: match.id,
+          matchId: match.id,
           questionId: questionId,
         },
       });
