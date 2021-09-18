@@ -3,10 +3,12 @@ import { RequestWithUser } from '@/interfaces/auth.interface';
 import { Comment } from '.prisma/client';
 import CommentService from '@/services/comment.service';
 import ResponseService from '@/services/response.service';
+import UserService from '@/services/user.service';
 
 class CommentController {
   public commentService = new CommentService();
   public responseService = new ResponseService();
+  public userService = new UserService();
 
   public list = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
     try {
@@ -29,19 +31,34 @@ class CommentController {
         },
       });
 
-      // transform Comment's Likes array to likes count
-      const likesArrayToCount = comment => {
+      // resolve Comment object
+      const transformComment = async comment => {
+        const [userObj, userResponses] = await Promise.all([
+          this.userService.getUserObject(comment.uid),
+          this.responseService.getUserResponsesForQuestion(comment.uid, questionId),
+        ]);
+
         return {
           ...comment,
+          user: userObj,
+          userResponses: userResponses,
           likes: comment.likes.length,
         };
       };
-      const transformedComments = comments.map(comment => {
-        return {
-          ...likesArrayToCount(comment),
-          children: comment['children'].map(likesArrayToCount),
-        };
-      });
+
+      const transformedComments = await Promise.all(
+        comments.map(async comment => {
+          const [transformedComment, children] = await Promise.all([
+            transformComment(comment),
+            Promise.all(comment['children'].map(transformComment)),
+          ]);
+
+          return {
+            ...transformedComment,
+            children: children,
+          };
+        }),
+      );
 
       res.json({
         value: transformedComments,

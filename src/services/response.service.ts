@@ -1,5 +1,6 @@
 import { HttpException } from '@/exceptions/HttpException';
 import prismaClient from '@/prisma/client';
+import { Response } from '.prisma/client';
 import Service from './service';
 
 class ResponseService extends Service {
@@ -23,6 +24,20 @@ class ResponseService extends Service {
     if (!userHasAnswered) {
       throw new HttpException(400, `User has not answered question.`);
     }
+  }
+
+  /*
+  Returns user's responses for a question as an array of optionId.
+  */
+  public async getUserResponsesForQuestion(userId: string, questionId: number): Promise<number[]> {
+    const responses: Response[] = await this.resource.findMany({
+      where: {
+        uid: userId,
+        questionId: questionId,
+      },
+    });
+
+    return responses.map(response => response.optionId);
   }
 }
 
