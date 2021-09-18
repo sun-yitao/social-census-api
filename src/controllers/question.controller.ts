@@ -1,15 +1,16 @@
 import { NextFunction, Response } from 'express';
 import { RequestWithUser } from '@/interfaces/auth.interface';
-import { Question, QuestionOption } from '.prisma/client';
+import { Question, QuestionOption, Like } from '.prisma/client';
 import QuestionService from '@/services/question.service';
 import ResponseService from '@/services/response.service';
 import QuestionOptionService from '@/services/questionOption.service';
-import { HttpException } from '@/exceptions/HttpException';
+import LikeService from '@/services/like.service';
 
 class QuestionController {
   public questionService = new QuestionService();
   public responseService = new ResponseService();
   public questionOptionService = new QuestionOptionService();
+  public likeService = new LikeService();
 
   public list = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
     try {
@@ -90,6 +91,29 @@ class QuestionController {
 
       res.json({
         value: optionsResponsesCount,
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public getUserLikedComments = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const userId = req.user.uid;
+      const questionId = parseInt(req.params.questionId);
+      await this.responseService.userHasNotAnsweredThrow(userId, questionId);
+
+      const likes: Like[] = await this.likeService.findMany({
+        where: {
+          uid: userId,
+          comment: {
+            questionId: questionId,
+          },
+        },
+      });
+
+      res.json({
+        value: likes.map(like => like.commentId),
       });
     } catch (error) {
       next(error);

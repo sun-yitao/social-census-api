@@ -35,3 +35,11 @@ Content-Type: {{json}}
 GET {{baseURL}}/questions/1/statistics
 Authorization: Bearer {{authToken}}
 Content-Type: {{json}}
+
+
+###
+@authToken = {{signin.response.body.jwt}}
+# Get comments that user liked for this question
+GET {{baseURL}}/questions/3/userliked
+Authorization: Bearer {{authToken}}
+Content-Type: {{json}}
