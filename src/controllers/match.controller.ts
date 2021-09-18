@@ -1,7 +1,7 @@
 import { NextFunction, Response } from 'express';
 import { RequestWithUser } from '@/interfaces/auth.interface';
 import { HttpException } from '@/exceptions/HttpException';
-import { Match, MatchExclusion } from '.prisma/client';
+import { Match, MatchExclusion, Response as ResponseType } from '.prisma/client';
 import redisClient from '@/services/redisClient';
 import { isEmpty, randomString } from '@/utils/util';
 
@@ -10,6 +10,7 @@ import MatchService from '@/services/match.service';
 import MatchQuestionService from '@/services/matchQuestion.service';
 import QuestionService from '@/services/question.service';
 import ResponseService from '@/services/response.service';
+import { accessSync } from 'fs';
 
 class MatchController {
   private matchService = new MatchService();
@@ -166,6 +167,142 @@ class MatchController {
       });
     }
   }
+
+  public getMatchReport = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const userId = req.user.uid;
+      const matchId = Number(req.params.matchId);
+      const match: Match = await this.matchService.findFirstOptional({
+        where: {
+          id: Number(matchId),
+        },
+        include: {
+          matchQuestions: true,
+        },
+      });
+      if (!match) {
+        throw new HttpException(404, 'Match id not found');
+      }
+      if (userId != match.uid && userId != match.otherUid) {
+        throw new HttpException(403, 'Unauthorized');
+      }
+      const matchReport = await this.generateMatchReport(match);
+
+      res.status(200);
+      res.json({
+        value: {
+          matchReport: matchReport,
+        },
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  private async generateMatchReport(match: Match): Promise<object> {
+    const matchReport = {
+      matchPercentage: '0',
+      sameResponses: [],
+      differentResponses1: [],
+      differentResponses2: [],
+    };
+    const matchQuestions: number[] = match['matchQuestions'].map(matchQuestion => matchQuestion.questionId);
+    if (isEmpty(matchQuestions)) {
+      return matchReport;
+    }
+    const user1Responses = {};
+    (
+      await this.responseService.findMany({
+        where: {
+          uid: {
+            equals: match.uid,
+          },
+          questionId: {
+            in: matchQuestions,
+          },
+        },
+        orderBy: {
+          questionId: 'asc',
+        },
+      })
+    ).forEach((response: ResponseType) => {
+      if (response.questionId in user1Responses) {
+        user1Responses[response.questionId].push(response);
+      } else {
+        user1Responses[response.questionId] = [response];
+      }
+    });
+    const user2Responses = {};
+    (
+      await this.responseService.findMany({
+        where: {
+          uid: {
+            equals: match.otherUid,
+          },
+          questionId: {
+            in: matchQuestions,
+          },
+        },
+        orderBy: {
+          questionId: 'asc',
+        },
+      })
+    ).forEach((response: ResponseType) => {
+      if (response.questionId in user2Responses) {
+        user2Responses[response.questionId].push(response);
+      } else {
+        user2Responses[response.questionId] = [response];
+      }
+    });
+    let similarQuestions = 0;
+    for (const questionId of matchQuestions) {
+      const user1Response = user1Responses[questionId];
+      const user2Response = user2Responses[questionId];
+      let isSimilar = true;
+      if (user1Response.length == user2Response.length) {
+        for (let i = 0; i < user1Response.length; i++) {
+          if (user1Response[i].optionId != user2Response[i].optionId) {
+            isSimilar = false;
+          }
+        }
+      } else {
+        isSimilar = false;
+      }
+      if (isSimilar) {
+        similarQuestions++;
+        matchReport.sameResponses.push(user1Response);
+      } else {
+        matchReport.differentResponses1.push(user1Response);
+        matchReport.differentResponses2.push(user2Response);
+      }
+    }
+    matchReport.matchPercentage = ((similarQuestions / matchQuestions.length) * 100).toFixed(2);
+    return matchReport;
+  }
+
+  public getMatchHistory = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const userId = req.user.uid;
+      res.status(200);
+      res.json({
+        value: {},
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public deleteMatch = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const userId = req.user.uid;
+      res.status(200);
+      res.json({
+        value: {},
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 export default MatchController;

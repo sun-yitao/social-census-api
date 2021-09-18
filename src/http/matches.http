@@ -32,3 +32,10 @@ Content-Type: {{json}}
     "matchCode": "{{matchCode}}"
   }
 }
+
+###
+@authToken = {{signin.response.body.jwt}}
+# Get match report
+GET {{baseURL}}/match/2
+Authorization: Bearer {{authToken}}
+Content-Type: {{json}}
