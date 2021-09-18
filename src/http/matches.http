@@ -9,26 +9,26 @@ POST {{baseURL}}/signin
 Content-Type: {{json}}
 
 {
-  "email": "tester@gmail.com",
+  "email": "tester2@gmail.com",
 	"password": "123456789"
 }
 
 ###
 @authToken = {{signin.response.body.jwt}}
-# Get match token
+# @name getMatchCode
 GET {{baseURL}}/match/code
 Authorization: Bearer {{authToken}}
 Content-Type: {{json}}
 
 ###
-@authToken = {{signin.response.body.jwt}}
-# Create a new match exclusion
-POST {{baseURL}}/match/exclusions
+@matchCode = {{getMatchCode.response.body.value.matchCode}}
+# Fill in match
+POST {{baseURL}}/match
 Authorization: Bearer {{authToken}}
 Content-Type: {{json}}
 
 {
   "value": {
-    "questionId": 3
+    "matchCode": "{{matchCode}}"
   }
 }
