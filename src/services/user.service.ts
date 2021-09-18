@@ -1,3 +1,5 @@
+import prismaClient from '@/prisma/client';
+
 const admin = require('../firebase/firebase-config');
 
 class UserService {
@@ -9,6 +11,33 @@ class UserService {
       username: user.username,
       photoId: user.photoId,
     };
+  }
+
+  public async deleteUser(uid: string): Promise<void> {
+    const obtainUserClause = {
+      where: {
+        uid: uid,
+      },
+    };
+
+    await Promise.all([
+      prismaClient.response.deleteMany(obtainUserClause),
+      prismaClient.comment.deleteMany(obtainUserClause),
+      prismaClient.like.deleteMany(obtainUserClause),
+      prismaClient.matchExclusion.deleteMany(obtainUserClause),
+      prismaClient.match.deleteMany({
+        where: {
+          OR: [
+            {
+              uid: uid,
+            },
+            {
+              otherUid: uid,
+            },
+          ],
+        },
+      }),
+    ]);
   }
 }
 
