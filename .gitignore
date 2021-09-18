@@ -119,6 +119,7 @@ dist
 
 # data
 postgres-data/
+redis-data/
 
 # firebase secrets
 firebasePrivateKey.json
