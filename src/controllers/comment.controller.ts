@@ -4,6 +4,7 @@ import { Comment } from '.prisma/client';
 import CommentService from '@/services/comment.service';
 import ResponseService from '@/services/response.service';
 import UserService from '@/services/user.service';
+import { HttpException } from '@/exceptions/HttpException';
 
 class CommentController {
   public commentService = new CommentService();
@@ -97,6 +98,34 @@ class CommentController {
       res.json({
         value: comment,
       });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public delete = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const userId = req.user.uid;
+      const commentId = parseInt(req.params.commentId);
+      const questionId = parseInt(req.params.questionId);
+
+      const commentWhereClause = {
+        id: commentId,
+        uid: userId,
+        questionId: questionId,
+      };
+      // checks whether comment belongs to question, and that user is deleting own comment.
+      const comment = await this.commentService.findFirstOptional({
+        where: commentWhereClause,
+      });
+      if (comment == null) {
+        throw new HttpException(404, 'comment not found for user & question');
+      }
+
+      await this.commentService.deleteMany({
+        where: commentWhereClause,
+      });
+      res.sendStatus(204);
     } catch (error) {
       next(error);
     }

@@ -1,7 +1,7 @@
 import { NextFunction, Response } from 'express';
 import { RequestWithUser } from '@/interfaces/auth.interface';
 import { HttpException } from '@/exceptions/HttpException';
-import { Match, MatchExclusion, MatchQuestion } from '.prisma/client';
+import { Match, MatchExclusion } from '.prisma/client';
 import redisClient from '@/services/redisClient';
 import { isEmpty, randomString } from '@/utils/util';
 
