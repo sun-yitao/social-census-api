@@ -54,3 +54,23 @@ Content-Type: {{json}}
 DELETE {{baseURL}}/questions/3/comments/1/likes
 Authorization: Bearer {{authToken}}
 Content-Type: {{json}}
+
+###
+@authToken = {{signin.response.body.jwt}}
+# Report a comment
+POST {{baseURL}}/questions/3/comments/6/reports
+Authorization: Bearer {{authToken}}
+Content-Type: {{json}}
+
+{
+  "value": {
+    "reason": "Blah"
+  }
+}
+
+###
+@authToken = {{signin.response.body.jwt}}
+# Unreport a comment
+DELETE {{baseURL}}/questions/3/comments/6/reports
+Authorization: Bearer {{authToken}}
+Content-Type: {{json}}

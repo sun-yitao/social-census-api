@@ -61,12 +61,21 @@ model Comment {
   parent     Comment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
   children   Comment[] @relation("CommentReplies")
   likes      Like[]
-
+  reports    Report[]
 }
 
 model Like {
   uid       String
   commentId Int
+  comment   Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+
+  @@id([uid, commentId])
+}
+
+model Report {
+  uid       String
+  commentId Int
+  reason    String?
   comment   Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
 
   @@id([uid, commentId])
@@ -81,10 +90,10 @@ model MatchExclusion {
 }
 
 model Match {
-  id        Int      @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   uid       String
   otherUid  String?
-  createdAt DateTime @default(now())
+  createdAt DateTime  @default(now())
   matchedAt DateTime?
 
   matchQuestions MatchQuestion[]
