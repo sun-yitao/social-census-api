@@ -15,8 +15,8 @@ Content-Type: {{json}}
 
 ###
 @authToken = {{signin.response.body.jwt}}
-# Get match token
-GET {{baseURL}}/match/code
+# List match exclusions for a user
+GET {{baseURL}}/match/exclusions
 Authorization: Bearer {{authToken}}
 Content-Type: {{json}}
 
@@ -24,6 +24,19 @@ Content-Type: {{json}}
 @authToken = {{signin.response.body.jwt}}
 # Create a new match exclusion
 POST {{baseURL}}/match/exclusions
+Authorization: Bearer {{authToken}}
+Content-Type: {{json}}
+
+{
+  "value": {
+    "questionId": 3
+  }
+}
+
+###
+@authToken = {{signin.response.body.jwt}}
+# Delete a match exclusion
+DELETE {{baseURL}}/match/exclusions
 Authorization: Bearer {{authToken}}
 Content-Type: {{json}}
 

@@ -1,3 +1,5 @@
+import { randomBytes } from 'crypto';
+
 /**
  * @method isEmpty
  * @param {String | Number | Object} value
@@ -17,3 +19,17 @@ export const isEmpty = (value: string | number | object): boolean => {
     return false;
   }
 };
+
+export function randomString(length) {
+  const chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+  const randomBytesArr = randomBytes(length);
+  const result = new Array(length);
+
+  let cursor = 0;
+  for (let i = 0; i < length; i++) {
+    cursor += randomBytesArr[i];
+    result[i] = chars[cursor % chars.length];
+  }
+
+  return result.join('');
+}

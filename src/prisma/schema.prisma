@@ -83,9 +83,9 @@ model MatchExclusion {
 model Match {
   id        Int      @id @default(autoincrement())
   uid       String
-  otherUid  String
+  otherUid  String?
   createdAt DateTime @default(now())
-  matchedAt DateTime
+  matchedAt DateTime?
 
   matchQuestions MatchQuestion[]
 }
