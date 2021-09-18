@@ -12,7 +12,7 @@ generator client {
 
 model Response {
   uid        String
-  option     QuestionOption @relation(fields: [optionId, questionId], references: [id, questionId])
+  option     QuestionOption @relation(fields: [optionId, questionId], references: [id, questionId], onDelete: Cascade)
   optionId   Int
   questionId Int
   createdAt  DateTime       @default(now())
@@ -22,7 +22,7 @@ model Response {
 
 model QuestionOption {
   id         Int
-  question   Question   @relation(fields: [questionId], references: [id])
+  question   Question   @relation(fields: [questionId], references: [id], onDelete: Cascade)
   questionId Int
   body       String
   responses  Response[]
@@ -52,13 +52,13 @@ enum QuestionType {
 
 model Comment {
   id         Int       @id @default(autoincrement())
-  question   Question  @relation(fields: [questionId], references: [id])
+  question   Question  @relation(fields: [questionId], references: [id], onDelete: Cascade)
   questionId Int
   uid        String
   parentId   Int?
   body       String
   createdAt  DateTime  @default(now())
-  parent     Comment?  @relation("CommentReplies", fields: [parentId], references: [id])
+  parent     Comment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
   children   Comment[] @relation("CommentReplies")
   likes      Like[]
 
@@ -67,7 +67,7 @@ model Comment {
 model Like {
   uid       String
   commentId Int
-  comment   Comment @relation(fields: [commentId], references: [id])
+  comment   Comment @relation(fields: [commentId], references: [id], onDelete: Cascade)
 
   @@id([uid, commentId])
 }
@@ -75,7 +75,7 @@ model Like {
 model MatchExclusion {
   uid        String
   questionId Int
-  question   Question @relation(fields: [questionId], references: [id])
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
 
   @@id([uid, questionId])
 }
@@ -93,8 +93,8 @@ model Match {
 model MatchQuestion {
   matchId    Int
   questionId Int
-  question   Question @relation(fields: [questionId], references: [id])
-  match      Match    @relation(fields: [matchId], references: [id])
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  match      Match    @relation(fields: [matchId], references: [id], onDelete: Cascade)
 
   @@id([matchId, questionId])
 }

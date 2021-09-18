@@ -49,10 +49,7 @@ class QuestionController {
     try {
       const userId = req.user.uid;
       const questionId = parseInt(req.params.questionId);
-      const userHasAnswered: boolean = await this.responseService.userHasAnswered(userId, questionId);
-      if (userHasAnswered) {
-        throw new HttpException(400, `User has already answered question.`);
-      }
+      await this.responseService.userHasAnsweredThrow(userId, questionId);
 
       const question: Question = await this.questionService.findUnique({
         where: {

@@ -19,6 +19,13 @@ class ResponseService extends Service {
     return userResponse !== null;
   }
 
+  public async userHasAnsweredThrow(userId: string, questionId: number): Promise<void> {
+    const userHasAnswered: boolean = await this.userHasAnswered(userId, questionId);
+    if (userHasAnswered) {
+      throw new HttpException(400, `User has already answered question.`);
+    }
+  }
+
   public async userHasNotAnsweredThrow(userId: string, questionId: number): Promise<void> {
     const userHasAnswered: boolean = await this.userHasAnswered(userId, questionId);
     if (!userHasAnswered) {

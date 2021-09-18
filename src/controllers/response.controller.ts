@@ -12,6 +12,9 @@ class ResponseController {
       const userId = req.user.uid;
       const questionId = parseInt(req.params.questionId);
       const responses = req.body.responses;
+
+      // check whether user has already answered question
+      await this.responseService.userHasAnsweredThrow(userId, questionId);
       // if responses empty or not all responses has same questionId
       if (responses.length == 0) {
         throw new HttpException(400, 'Invalid responses');
