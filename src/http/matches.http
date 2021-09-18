@@ -36,6 +36,20 @@ Content-Type: {{json}}
 ###
 @authToken = {{signin.response.body.jwt}}
 # Get match report
-GET {{baseURL}}/match/2
+GET {{baseURL}}/match/5
+Authorization: Bearer {{authToken}}
+Content-Type: {{json}}
+
+###
+@authToken = {{signin.response.body.jwt}}
+# Get match history
+GET {{baseURL}}/match
+Authorization: Bearer {{authToken}}
+Content-Type: {{json}}
+
+###
+@authToken = {{signin.response.body.jwt}}
+# Delete match
+DELETE {{baseURL}}/match/5
 Authorization: Bearer {{authToken}}
 Content-Type: {{json}}

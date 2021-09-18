@@ -8,15 +8,12 @@ import { isEmpty, randomString } from '@/utils/util';
 import MatchExclusionService from '@/services/matchExclusion.service';
 import MatchService from '@/services/match.service';
 import MatchQuestionService from '@/services/matchQuestion.service';
-import QuestionService from '@/services/question.service';
 import ResponseService from '@/services/response.service';
-import { accessSync } from 'fs';
 
 class MatchController {
   private matchService = new MatchService();
   private matchExclusionService = new MatchExclusionService();
   private matchQuestionService = new MatchQuestionService();
-  private questionService = new QuestionService();
   public responseService = new ResponseService();
 
   // If no free match, create match. Create matchCode if not in Redis. Return matchCode
@@ -174,7 +171,7 @@ class MatchController {
       const matchId = Number(req.params.matchId);
       const match: Match = await this.matchService.findFirstOptional({
         where: {
-          id: Number(matchId),
+          id: matchId,
         },
         include: {
           matchQuestions: true,
@@ -283,9 +280,29 @@ class MatchController {
   public getMatchHistory = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
     try {
       const userId = req.user.uid;
+      const matches = (
+        await this.matchService.findMany({
+          where: {
+            OR: [
+              {
+                uid: {
+                  equals: userId,
+                },
+              },
+              {
+                otherUid: {
+                  equals: userId,
+                },
+              },
+            ],
+          },
+        })
+      ).filter((match: Match) => match.uid != null && match.otherUid != null);
       res.status(200);
       res.json({
-        value: {},
+        value: {
+          matches: matches,
+        },
       });
     } catch (error) {
       next(error);
@@ -295,10 +312,23 @@ class MatchController {
   public deleteMatch = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
     try {
       const userId = req.user.uid;
-      res.status(200);
-      res.json({
-        value: {},
+      const matchId = Number(req.params.matchId);
+      const match: Match = await this.matchService.findFirstOptional({
+        where: {
+          id: matchId,
+        },
+        include: {
+          matchQuestions: true,
+        },
       });
+      if (!match) {
+        throw new HttpException(404, 'Match id not found');
+      }
+      if (userId != match.uid && userId != match.otherUid) {
+        throw new HttpException(403, 'Unauthorized');
+      }
+      await this.matchService.delete(matchId);
+      res.sendStatus(204);
     } catch (error) {
       next(error);
     }

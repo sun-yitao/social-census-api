@@ -16,9 +16,10 @@ class MatchRoute implements Routes {
 
   private initializeRoutes() {
     this.router.get(`${this.path}`, authMiddleware, this.matchController.getMatchHistory);
-    this.router.get(`${this.path}/:matchId(\\d+)`, authMiddleware, this.matchController.getMatchReport);
-    this.router.get(`${this.path}/code`, authMiddleware, this.matchController.getMatchCode);
     this.router.post(`${this.path}`, authMiddleware, this.matchController.fillMatch);
+    this.router.get(`${this.path}/code`, authMiddleware, this.matchController.getMatchCode);
+    this.router.get(`${this.path}/:matchId(\\d+)`, authMiddleware, this.matchController.getMatchReport);
+    this.router.delete(`${this.path}/:matchId(\\d+)`, authMiddleware, this.matchController.deleteMatch);
 
     this.router.get(`${this.path}/exclusions`, authMiddleware, this.matchExclusionController.list);
     this.router.post(`${this.path}/exclusions`, authMiddleware, this.matchExclusionController.create);
