@@ -6,7 +6,7 @@
         "dir": "../logs"
     },
     "cors": {
-        "origin": ["https://social-census.com", "http://localhost:3000"],
+        "origin": "https://social-census.com",
         "credentials": true
     }
 }
