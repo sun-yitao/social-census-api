@@ -44,12 +44,7 @@ class App {
 
   private initializeMiddlewares() {
     this.app.use(morgan(config.get('log.format'), { stream }));
-    const corsConfig: { origin: string; credentials: boolean } = {
-      origin: config.get('cors.origin'),
-      credentials: config.get('cors.credentials'),
-    };
-    this.app.use(cors(corsConfig));
-    this.app.options('*', cors(corsConfig));
+    this.app.use(cors({ origin: config.get('cors.origin'), credentials: config.get('cors.credentials') }));
     this.app.use(hpp());
     this.app.use(helmet());
     this.app.use(express.json());
