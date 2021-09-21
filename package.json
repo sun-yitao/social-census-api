@@ -31,6 +31,7 @@
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "cross-env": "^7.0.3",
+    "csv-parser": "^3.0.0",
     "dotenv": "^10.0.0",
     "envalid": "^7.1.0",
     "express": "^4.17.1",
