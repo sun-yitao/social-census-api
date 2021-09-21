@@ -13,6 +13,14 @@ Content-Type: {{json}}
 	"password": "123456789"
 }
 
+
+###
+@authToken = {{signin.response.body.jwt}}
+# Send responses to a question
+GET {{baseURL}}/responses
+Authorization: Bearer {{authToken}}
+Content-Type: {{json}}
+
 ###
 @authToken = {{signin.response.body.jwt}}
 # Send responses to a question

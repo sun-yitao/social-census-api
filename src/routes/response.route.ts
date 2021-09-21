@@ -13,6 +13,7 @@ class ResponseRoute implements Routes {
   }
 
   private initializeRoutes() {
+    this.router.get('/responses', authMiddleware, this.responseController.list);
     this.router.post(`${this.path}`, authMiddleware, this.responseController.create);
   }
 }

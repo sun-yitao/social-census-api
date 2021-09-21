@@ -46,43 +46,6 @@ class QuestionController {
     }
   };
 
-  public getUserAnswered = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
-    try {
-      const userId = req.user.uid;
-      const userResponses = (
-        await this.responseService.findMany({
-          where: {
-            uid: {
-              equals: userId,
-            },
-          },
-          select: {
-            questionId: true,
-          },
-          distinct: ['questionId'],
-        })
-      ).map(response => response['questionId']);
-
-      const userAnsweredQuestions: Question[] = await this.questionService.findMany({
-        include: {
-          options: {
-            include: {
-              responses: true,
-            },
-          },
-        },
-        where: {
-          id: { in: userResponses },
-        },
-      });
-      res.json({
-        value: userAnsweredQuestions,
-      });
-    } catch (error) {
-      next(error);
-    }
-  };
-
   public get = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
     try {
       const userId = req.user.uid;

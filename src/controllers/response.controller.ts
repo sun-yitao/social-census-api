@@ -7,6 +7,25 @@ import { Response as ResponseType } from '.prisma/client';
 class ResponseController {
   public responseService = new ResponseService();
 
+  public list = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
+    try {
+      const userId = req.user.uid;
+      const userResponses = await this.responseService.findMany({
+        where: {
+          uid: {
+            equals: userId,
+          },
+        },
+      });
+
+      res.json({
+        value: userResponses,
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
   public create = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
     try {
       const userId = req.user.uid;
