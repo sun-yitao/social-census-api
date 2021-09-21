@@ -20,6 +20,12 @@ GET {{baseURL}}/questions
 Authorization: Bearer {{authToken}}
 Content-Type: {{json}}
 
+###
+@authToken = {{signin.response.body.jwt}}
+# Get user answered questions
+GET {{baseURL}}/questions/answered
+Authorization: Bearer {{authToken}}
+Content-Type: {{json}
 
 ###
 @authToken = {{signin.response.body.jwt}}
