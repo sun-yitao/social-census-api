@@ -8,8 +8,8 @@ class UserService {
     return {
       uid: user.uid,
       email: user.email,
-      username: user.username,
-      photoId: user.photoId,
+      displayName: user.displayName,
+      photoURL: user.photoURL,
     };
   }
 
