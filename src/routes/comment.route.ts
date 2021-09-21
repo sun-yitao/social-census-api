@@ -19,7 +19,7 @@ class CommentRoute implements Routes {
   private initializeRoutes() {
     this.router.get(`${this.path}`, authMiddleware, this.commentController.list);
     this.router.post(`${this.path}`, authMiddleware, this.commentController.create);
-    this.router.post(`${this.path}/:commentId(\\d+)`, authMiddleware, this.commentController.delete);
+    this.router.delete(`${this.path}/:commentId(\\d+)`, authMiddleware, this.commentController.delete);
     this.router.post(`${this.path}/:commentId(\\d+)/likes`, authMiddleware, this.likeController.create);
     this.router.delete(`${this.path}/:commentId(\\d+)/likes`, authMiddleware, this.likeController.delete);
     this.router.post(`${this.path}/:commentId(\\d+)/reports`, authMiddleware, this.reportController.create);

@@ -37,7 +37,7 @@ Content-Type: {{json}}
 ###
 @authToken = {{signin.response.body.jwt}}
 # Delete a comment
-POST {{baseURL}}/questions/3/comments/1
+DELETE {{baseURL}}/questions/3/comments/1
 Authorization: Bearer {{authToken}}
 Content-Type: {{json}}
 
