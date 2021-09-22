@@ -50,7 +50,6 @@ class QuestionController {
     try {
       const userId = req.user.uid;
       const questionId = parseInt(req.params.questionId);
-      await this.responseService.userHasAnsweredThrow(userId, questionId);
 
       const question: Question = await this.questionService.findUnique({
         where: {
