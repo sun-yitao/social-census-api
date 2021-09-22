@@ -302,10 +302,21 @@ class MatchController {
           },
         })
       ).filter((match: Match) => match.uid != null && match.otherUid != null);
+
+      const resolveMatchUsers = async (match: Match) => {
+        const [user, otherUser] = await Promise.all([this.userService.getUserObject(match.uid), this.userService.getUserObject(match.otherUid)]);
+        return {
+          ...match,
+          user: user,
+          otherUser: otherUser,
+        };
+      };
+      const resolvedMatches = await Promise.all(matches.map(resolveMatchUsers));
+
       res.status(200);
       res.json({
         value: {
-          matches: matches,
+          matches: resolvedMatches,
         },
       });
     } catch (error) {
