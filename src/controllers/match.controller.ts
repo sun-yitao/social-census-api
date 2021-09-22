@@ -9,12 +9,14 @@ import MatchExclusionService from '@/services/matchExclusion.service';
 import MatchService from '@/services/match.service';
 import MatchQuestionService from '@/services/matchQuestion.service';
 import ResponseService from '@/services/response.service';
+import UserService from '@/services/user.service';
 
 class MatchController {
   private matchService = new MatchService();
   private matchExclusionService = new MatchExclusionService();
   private matchQuestionService = new MatchQuestionService();
   public responseService = new ResponseService();
+  public userService = new UserService();
 
   // If no free match, create match. Create matchCode if not in Redis. Return matchCode
   public getMatchCode = async (req: RequestWithUser, res: Response, next: NextFunction): Promise<void> => {
@@ -202,6 +204,8 @@ class MatchController {
       sameResponses: [],
       differentResponses1: [],
       differentResponses2: [],
+      user: await this.userService.getUserObject(match.uid),
+      otherUser: await this.userService.getUserObject(match.otherUid),
     };
     const matchQuestions: number[] = match['matchQuestions'].map(matchQuestion => matchQuestion.questionId);
     if (isEmpty(matchQuestions)) {
