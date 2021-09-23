@@ -23,7 +23,7 @@ async function main() {
         body: row['Questions'].trim(),
         category: row['Category'].trim(),
         type: row['Type'].trim(),
-        knowMore: {},
+        knowMore: row['KnowMore'] ? JSON.parse(row['KnowMore'].trim()) : {},
         options: {
           create: options,
         },
@@ -31,9 +31,11 @@ async function main() {
     })
     .on('end', async () => {
       for (const q of questionData) {
+        console.log('what the ');
         const question = await prismaClient.question.create({
           data: q,
         });
+        console.log('what the 2');
         console.log(`Created question with id: ${question.id}`);
       }
       console.log(`Seeding finished.`);

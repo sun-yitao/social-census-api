@@ -1,30 +1,82 @@
-Questions,Category,Type,Options
-Would you speak up if a relative raises a homophobic comment?,general,BINARY,"Yes, No"
-Do you feel safe walking alone at night?,general,BINARY,"Yes, No"
-How old are you?,general,MULTIPLE_CHOICE,"1 to 10, 11 to 20, 21 to 30, 31 to 40, 41 to 50, 50 and above"
-Have you suffered from mental health conditions/disorders?,general,BINARY,"Yes, No"
-How many kids would you like to have?,general,MULTIPLE_CHOICE,"None,1,2,3,4,5 or more"
-What is your ideal age for marriage?,general,MULTIPLE_CHOICE,"I don't intend to get married, 18-20, 21-23, 24-26, 27-29, 30 and above"
-Have you ever contemplated suicide?,general,BINARY,"Yes, No"
-"@ people who suffer from clinical depression, do you feel sad all the time? 
-Share in the comments section: how would you describe your emotions?",general,BINARY,"Yes, No"
-What is your preferred work/learning style?,general,BINARY,"In-person, Work-from-home"
-My home is conducive for Work-From-Home/Home-based learning.,general,BINARY,"Yes,No"
-@ people suffering from/used to suffer from anxiety/panic disorder: what is the worst thing someone can say to you during an attack? ,general,BINARY,"Yes (elaborate in comments), Not applicable"
-Would you marry someone from another race?,general,BINARY,"Yes, No"
-Would you marry someone of a different religion?,general,BINARY,"Yes, No"
-Are you comfortable if a family member comes out as LGBTQ+?,general,BINARY,"Yes, No"
-My family can afford to send me for higher education.,general,BINARY,"Yes, No"
-I have to work part-time to afford my studies.,general,BINARY,"Yes, No"
-"How much do you relate with this statement.
-I feel like I have to give up on future higher education options because of my family's/my own financial situation,,",general,BINARY,"Yes, No"
-My family has a housekeeper.,general,BINARY,"Yes, No"
-Do you want to get married? Why/Why not?,general,BINARY ,"Yes, No"
-Does your family travel overseas for vacation annually?,general,BINARY,"Yes, No"
-I feel safe at home.,general,BINARY,"Yes, No"
-I have felt ashamed of my family before.,general,BINARY,"Yes, No"
-Is a BTO agreement good enough as a marriage proposal?,general,BINARY,"Yes, No"
-"Di you relate? As a working adult, I find it difficult to meet new people out side of work. ",general,SCALE,"1,2,3,4,5"
-Do you relate with this statement? Friendships are seasonable. ,general,SCALE,"1,2,3,4,5"
-Do you relate? My family struggles to make ends meet. ,general,SCALE ,"1,.2,3,4,5"
-"Do you agree? It is futile to protect the environment, it is already doomed.",general,SCALE,"1,2,3,4,5"
+Questions,Category,Type,Options,KnowMore
+Would you speak up if a relative raises a homophobic comment?,general,BINARY,"Yes, No",
+Do you feel safe walking alone at night?,general,BINARY,"Yes, No",
+Have you suffered from mental health conditions/disorders?,general,BINARY,"Yes, No","{
+  ""body"": ""According to the Singapore Mental Health Study 2010, the lifetime prevalence of mental illness in the Singapore resident population is 12%, which is about 1 in 8 people having a mental disorder."",
+  ""sources"": [
+    {
+      ""url"": ""https://www.imh.com.sg/wellness/page.aspx?id=356"",
+      ""title"": ""Understanding Singaporeans' mental health""
+    }
+  ]
+}"
+How many kids would you like to have?,general,MULTIPLE_CHOICE,"None,1,2,3,4,5 or more",
+What is your ideal age for marriage?,general,MULTIPLE_CHOICE,"I don't intend to get married, 18-20, 21-23, 24-26, 27-29, 30 and above",
+Have you ever contemplated suicide?,general,BINARY,"Yes, No","{
+""body"": ""Suicide is the leading cause of death for those aged 10-29. For every suicide, at least 6 suicide survivors are left behind.\n\n If you are feeling suicidal, keep yourself safe, let someone know, and believe that things can change for the better. Seek support from mental health or counselling professionals, they can work with you to find ways to cope with difficult experiences, situations, or emotions. Check out the links below to seek help."",
+""sources"": [
+    {
+      ""url"": ""https://www.sos.org.sg/learn-about-suicide/quick-facts"",
+      ""title"": ""Quick Facts about Suicide (Samaratians of Singapore)""
+    },
+    {
+      ""url"": ""https://www.sos.org.sg/get-help/if-i-am-feeling-suicidal"",
+      ""title"": ""If I Am Feeling Suicidal (Samaritans of Singapore)""
+    }
+]
+}"
+I feel sad most of the time,general,SCALE,"1,2,3,4,5",
+What is your preferred work/learning style?,general,BINARY,"In-person, Work-from-home",
+My home is conducive for work-from-home/home-based learning.,general,BINARY,"Yes,No",
+Would you marry someone from another race?,general,BINARY,"Yes, No","{
+""body"": ""Interracial relationships are not unusual in Singapore. In 2020, 18.2 percent of marriages in Singapore were between couples of different ethnicities. However, they face unique challenges."",
+""sources"": [
+    {
+      ""url"": ""https://www.statista.com/statistics/995734/singapore-proportion-inter-ethnic-marriages/"",
+      ""title"": ""Proportion of inter-ethnic marriages in Singapore""
+    },
+    {
+      ""url"": ""https://www.straitstimes.com/singapore/community/love-knows-no-language-religion-or-culture-four-interracial-couples-share-their"",
+      ""title"": ""ST: Interracial relationships not unusual in S'pore""
+    }
+]
+}"
+Would you marry someone of a different religion?,general,BINARY,"Yes, No",
+Are you comfortable if a family member comes out as LGBTQ+?,general,BINARY,"Yes, No",
+My family can afford to send me for higher education.,general,BINARY,"Yes, No",
+I have to work part-time to afford my studies.,general,BINARY,"Yes, No","{
+""body"": ""The minimum age for non-industrial work in Singapore is 13 years-old. Let's get this bread?"",
+""sources"": [
+    {
+      ""url"": ""https://www.mom.gov.sg/employment-practices/young-persons-and-children"",
+      ""title"": ""Employing young persons and children""
+    }
+]
+}"
+My family has a housekeeper.,general,BINARY,"Yes, No",
+Do you want to get married?,general,BINARY ,"Yes, No",
+Does your family travel overseas for vacation annually?,general,BINARY,"Yes, No",
+I feel safe at home.,general,BINARY,"Yes, No",
+I have felt ashamed of my family before.,general,BINARY,"Yes, No",
+Is a BTO agreement good enough as a marriage proposal?,general,BINARY,"Yes, No","{
+""body"": ""The overall number of applications received for each Build-To-Order (BTO) flat climbed from 2.3 in 2017 to 5.8 in 2020, according to a release by HDB on July 25 2021.\n\nFor units in non-mature estates, these rates more than doubled, from 2.1 applications per flat in 2017 to 4.8 last year. Examples of non-mature areas include Punggol, Bukit Batok, Choa Chu Kang and Woodlands.\n\nBut demand for new flats in mature estates rose even more sharply – application rates swelled from 2.8 per flat to 6.7 in the same period."",
+""sources"": [
+    {
+      ""url"": ""https://www.channelnewsasia.com/singapore/bto-flats-demand-rise-mature-estates-hdb-property-2065671"",
+      ""title"": ""Spike in demand for BTO flats in recent years, especially in mature estates""
+    }
+]
+}"
+I feel like I have to give up on future higher education options because of my family's/my own financial situation.,general,SCALE,"1,2,3,4,5",
+"As a working adult, I find it difficult to meet new people outside of work.",general,SCALE,"1,2,3,4,5",
+Friendships are seasonal. People just come and go.,general,SCALE,"1,2,3,4,5",
+My family struggles to make ends meet/make enough money for necessities.,general,SCALE ,"1,2,3,4,5",
+"It is futile to protect the environment, my individual actions are too insignificant.",general,SCALE,"1,2,3,4,5","{
+""body"": ""Individual action on climate change can include personal choices in many areas, such as diet, means of long- and short-distance travel, household energy use, consumption of goods and services, and family size. Individuals can also engage in local and political advocacy around issues of climate change. In general, higher consumption lifestyles have a greater environmental impact, with the richest 10% of people emitting about half the total lifestyle emissions."",
+""sources"": [
+    {
+      ""url"": ""https://en.wikipedia.org/wiki/Individual_action_on_climate_change"",
+      ""title"": ""Individual Action on Climate Change""
+    }
+]
+}"
