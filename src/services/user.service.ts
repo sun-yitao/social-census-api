@@ -7,7 +7,6 @@ class UserService {
     const user = await admin.auth().getUser(uid);
     return {
       uid: user.uid,
-      email: user.email,
       displayName: user.displayName,
       photoURL: user.photoURL,
     };
