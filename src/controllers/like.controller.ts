@@ -2,6 +2,7 @@ import { NextFunction, Response } from 'express';
 import { RequestWithUser } from '@/interfaces/auth.interface';
 import LikeService from '@/services/like.service';
 import ResponseService from '@/services/response.service';
+import { HttpException } from '@/exceptions/HttpException';
 import { Like } from '.prisma/client';
 
 class LikeController {
@@ -14,6 +15,17 @@ class LikeController {
       const questionId = parseInt(req.params.questionId);
       const commentId = parseInt(req.params.commentId);
       await this.responseService.userHasNotAnsweredThrow(userId, questionId);
+
+      const exists: Like = await this.likeService.findFirstOptional({
+        where: {
+          uid: userId,
+          commentId: commentId,
+        },
+      });
+
+      if (exists) {
+        throw new HttpException(409, 'Like already exists');
+      }
 
       const like: Like = await this.likeService.create({
         data: {
