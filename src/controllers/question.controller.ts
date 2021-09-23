@@ -36,10 +36,16 @@ class QuestionController {
         where: {
           id: { notIn: userRespondedQuestions },
         },
-        take: 10,
       });
+
+      const shuffledQuestions = nextQuestions
+        .map(value => ({ value, sort: Math.random() }))
+        .sort((a, b) => a.sort - b.sort)
+        .map(({ value }) => value)
+        .slice(0, 10);
+
       res.json({
-        value: nextQuestions,
+        value: shuffledQuestions,
       });
     } catch (error) {
       next(error);
