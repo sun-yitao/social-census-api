@@ -16,7 +16,7 @@ class QuestionRoute implements Routes {
     this.router.get(`${this.path}`, authMiddleware, this.questionController.list);
     this.router.get(`${this.path}/:questionId(\\d+)`, authMiddleware, this.questionController.get);
     this.router.get(`${this.path}/:questionId(\\d+)/statistics`, authMiddleware, this.questionController.getStatistics);
-    this.router.get(`${this.path}/:questionId(\\d+)/userliked`, authMiddleware, this.questionController.getUserLikedComments);
+    this.router.get(`${this.path}/:questionId(\\d+)/comments/liked`, authMiddleware, this.questionController.getUserLikedComments);
   }
 }
 

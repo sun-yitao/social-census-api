@@ -22,13 +22,6 @@ Content-Type: {{json}}
 
 ###
 @authToken = {{signin.response.body.jwt}}
-# Get user answered questions
-GET {{baseURL}}/questions/answered
-Authorization: Bearer {{authToken}}
-Content-Type: {{json}
-
-###
-@authToken = {{signin.response.body.jwt}}
 # Get a question by id
 GET {{baseURL}}/questions/1
 Authorization: Bearer {{authToken}}
@@ -46,6 +39,6 @@ Content-Type: {{json}}
 ###
 @authToken = {{signin.response.body.jwt}}
 # Get comments that user liked for this question
-GET {{baseURL}}/questions/3/userliked
+GET {{baseURL}}/questions/3/comments/liked
 Authorization: Bearer {{authToken}}
 Content-Type: {{json}}
